@@ -17,7 +17,7 @@ read_ipsa_data <- function(year_start){
   return(df)
 }
 
-df_master <- read_csv("data/totalSpend_22_23.csv")
+df_master <- readr::read_csv("data/totalSpend_22_23.csv")
 #read_ipsa_data(2022)
 
 # Identify columns whose names contain "budget" or "spend" but not "reason"
