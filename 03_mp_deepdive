@@ -1,0 +1,21 @@
+# 3: MP deep-dive
+
+df_mp_usage <- df_master %>%
+  filter(Reason_for_budget_set...4 %in% c("Standard non-London area budget", "Standard London area budget")) %>% # 637 obs
+  mutate(location = ifelse(Reason_for_budget_set...4 == "Standard non-London area budget", "Non-London", "London")) %>%
+  mutate(office_usage = Office_spend/Office_budget,
+         staff_usage = Staffing_spend/Staffing_budget,
+         accomm_usage = Accommodation_spend/Accommodation_budget) %>%
+  select(MP_name, location, matches("usage"))
+
+df_boxplot <- df_mp_usage  %>%
+  pivot_longer(matches("usage"),names_to = "usage",values_to = "per")
+
+mp_boxplot <- ggplot(df_boxplot, aes(usage,per, fill = location)) +
+  geom_boxplot() +
+  scale_y_continuous("Percentage of budget used",labels = percent) +
+  theme_minimal() +
+  coord_flip()
+
+df_mp_usage %>%
+  slice_min(order_by = staff_usage, with_ties = FALSE)
